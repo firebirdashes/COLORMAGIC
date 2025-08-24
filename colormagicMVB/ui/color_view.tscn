@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://cyi3753qiydko"]
+
+[ext_resource type="Script" uid="uid://djftq4yoqx33" path="res://ui/color_view.gd" id="1_nkxue"]
+[ext_resource type="Shader" uid="uid://cvvfj8w6hb34l" path="res://depth pass.gdshader" id="2_ah1kn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_80gjm"]
+render_priority = 0
+shader = ExtResource("2_ah1kn")
+shader_parameter/near_plane = 0.05
+shader_parameter/far_plane = 100.0
+shader_parameter/use_quadratic = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_ah1kn"]
+flip_faces = true
+size = Vector2(2, 2)
+
+[node name="color" type="SubViewport"]
+transparent_bg = true
+canvas_cull_mask = 4294966274
+script = ExtResource("1_nkxue")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+cull_mask = 1047554
+
+[node name="depth" type="SubViewport" parent="."]
+canvas_cull_mask = 4294966278
+
+[node name="depth_cam" type="Camera3D" parent="depth"]
+cull_mask = 1047558
+
+[node name="main_depth" type="SubViewport" parent="."]
+canvas_cull_mask = 4294966277
+
+[node name="depth_cam" type="Camera3D" parent="main_depth"]
+cull_mask = 1047557
+
+[node name="depth_pass" type="MeshInstance3D" parent="."]
+layers = 4
+material_override = SubResource("ShaderMaterial_80gjm")
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_ah1kn")
+skeleton = NodePath("../depth/depth_cam")

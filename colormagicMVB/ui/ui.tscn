@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://de5cnmmkos42a"]
+
+[ext_resource type="Script" uid="uid://dajqf4qimr0f6" path="res://ui/ui.gd" id="1_wl5ax"]
+[ext_resource type="Shader" uid="uid://xv5bhfxp6u6i" path="res://grayscale.gdshader" id="3_vkava"]
+[ext_resource type="Shader" uid="uid://cus2ils7aeb8j" path="res://depth_cull.gdshader" id="4_swkix"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g5kmx"]
+shader = ExtResource("3_vkava")
+shader_parameter/enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hc5d0"]
+resource_local_to_scene = true
+shader = ExtResource("4_swkix")
+shader_parameter/debug_draw = false
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_swkix"]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_wl5ax")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="grayscale filter" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_g5kmx")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="Color pass" type="TextureRect" parent="CanvasLayer2"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_hc5d0")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_swkix")
+
+[node name="Label" type="Label" parent="CanvasLayer2"]
+offset_right = 40.0
+offset_bottom = 23.0

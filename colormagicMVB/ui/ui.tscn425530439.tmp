@@ -1,0 +1,282 @@
+[gd_scene load_steps=20 format=3 uid="uid://de5cnmmkos42a"]
+
+[ext_resource type="Script" uid="uid://cqpeju2glj4ue" path="res://scripts/autoloads/ui_handeler.gd" id="1_f5cxw"]
+[ext_resource type="Script" uid="uid://kyutcqx81yei" path="res://scripts/ui/dialogue manager.gd" id="2_0dwhk"]
+[ext_resource type="Shader" uid="uid://cd11kk4mevl16" path="res://shader/pixel.gdshader" id="2_aac20"]
+[ext_resource type="Shader" uid="uid://ccyht6m3b2ee3" path="res://shader/MColor.gdshader" id="2_f5cxw"]
+[ext_resource type="Script" uid="uid://dr3lnxrdd5ix6" path="res://scripts/ui/color_manager.gd" id="2_hl07w"]
+[ext_resource type="Script" uid="uid://hop7e6wnkrty" path="res://scripts/ui/fps.gd" id="4_g5kmx"]
+[ext_resource type="Shader" uid="uid://cus2ils7aeb8j" path="res://shader/depth_cull.gdshader" id="4_swkix"]
+[ext_resource type="Script" uid="uid://dkadqirylrrcl" path="res://scripts/ui/pause_menu.gd" id="5_jcn1r"]
+[ext_resource type="Script" uid="uid://dnt3icv3vvhea" path="res://scripts/ui/dialogue_ui.gd" id="6_pfayw"]
+[ext_resource type="Texture2D" uid="uid://drxew4tudjx0w" path="res://assets/textures/Dummy.png" id="6_uegxj"]
+[ext_resource type="Script" uid="uid://qfyup12ohrr2" path="res://scripts/debug_object.gd" id="9_uegxj"]
+[ext_resource type="Texture2D" uid="uid://dhfrhhhlb861l" path="res://assets/MUST REMOVE THESE ASSETS BEFORE SHIPPING/Untitled-1.png" id="10_y220t"]
+[ext_resource type="Script" uid="uid://cmn8tcmkbw8dk" path="res://scripts/ui/debug menu/warp module.gd" id="11_4kltc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g5kmx"]
+shader = ExtResource("2_f5cxw")
+shader_parameter/ColorModulate = Vector4(1, 1, 1, 1)
+shader_parameter/lerpDist = 0.3
+shader_parameter/enabledList = PackedInt32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hc5d0"]
+resource_local_to_scene = true
+shader = ExtResource("4_swkix")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_swkix"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aac20"]
+shader = ExtResource("2_aac20")
+shader_parameter/target_vertical_resolution = 240
+shader_parameter/ColorModulate = Vector4(1, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_x67sx"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y220t"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_uegxj")
+}],
+"loop": true,
+"name": &"inventory",
+"speed": 5.0
+}]
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_f5cxw")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("2_hl07w")
+
+[node name="grayscale filter" type="ColorRect" parent="CanvasLayer"]
+material = SubResource("ShaderMaterial_g5kmx")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="Color pass" type="TextureRect" parent="CanvasLayer2"]
+texture_filter = 1
+material = SubResource("ShaderMaterial_hc5d0")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_swkix")
+
+[node name="pixel filter" type="ColorRect" parent="CanvasLayer2"]
+material = SubResource("ShaderMaterial_aac20")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ui" type="CanvasLayer" parent="."]
+
+[node name="health" type="Label" parent="ui"]
+offset_left = 31.0
+offset_top = 33.0
+offset_right = 310.0
+offset_bottom = 138.0
+text = "health"
+label_settings = SubResource("LabelSettings_x67sx")
+
+[node name="Label" type="Label" parent="ui"]
+offset_left = 1074.0
+offset_top = 6.0
+offset_right = 1135.0
+offset_bottom = 39.0
+script = ExtResource("4_g5kmx")
+
+[node name="Pause menu" type="CanvasLayer" parent="."]
+script = ExtResource("5_jcn1r")
+
+[node name="Menu" type="AnimatedSprite2D" parent="Pause menu"]
+sprite_frames = SubResource("SpriteFrames_y220t")
+animation = &"inventory"
+
+[node name="item menu" type="Control" parent="Pause menu/Menu"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="info menu" type="Control" parent="Pause menu/Menu"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="dialogue ui" type="CanvasLayer" parent="."]
+script = ExtResource("6_pfayw")
+
+[node name="dialogue parser" type="Control" parent="dialogue ui"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("2_0dwhk")
+
+[node name="Speaker" type="Label" parent="dialogue ui"]
+offset_left = 262.0
+offset_top = 61.0
+offset_right = 322.0
+offset_bottom = 84.0
+text = "dummy"
+
+[node name="text box" type="RichTextLabel" parent="dialogue ui"]
+anchors_preset = -1
+anchor_right = 0.955
+anchor_bottom = 1.0
+offset_left = 263.12
+offset_top = 108.56
+offset_right = 263.232
+offset_bottom = 108.56
+text = "text"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="dialogue ui"]
+offset_left = 460.0
+offset_top = 406.0
+offset_right = 673.0
+offset_bottom = 542.0
+alignment = 1
+
+[node name="choice1" type="Button" parent="dialogue ui/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "dummy"
+
+[node name="choice2" type="Button" parent="dialogue ui/VBoxContainer"]
+layout_mode = 2
+disabled = true
+text = "dummy"
+
+[node name="debug menu" type="CanvasLayer" parent="."]
+script = ExtResource("9_uegxj")
+
+[node name="Control" type="Control" parent="debug menu"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_jcn1r")
+open_action = "open_debug"
+
+[node name="Menu" type="Sprite2D" parent="debug menu/Control"]
+position = Vector2(629, 326.5)
+scale = Vector2(1, 0.664264)
+texture = ExtResource("10_y220t")
+metadata/_edit_lock_ = true
+
+[node name="main" type="Control" parent="debug menu/Control/Menu"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("11_4kltc")
+
+[node name="target_room" type="TextEdit" parent="debug menu/Control/Menu/main"]
+layout_mode = 0
+offset_left = -162.0
+offset_top = 8.27984
+offset_right = -17.0
+offset_bottom = 78.2798
+text = "t"
+placeholder_text = "temp"
+
+[node name="warp_button" type="Button" parent="debug menu/Control/Menu/main"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 24.0868
+offset_right = 55.42
+offset_bottom = 65.9518
+text = "warp"
+
+[node name="save_label" type="Label" parent="debug menu/Control/Menu/main"]
+layout_mode = 0
+offset_left = -61.0
+offset_top = -77.5294
+offset_right = -21.0
+offset_bottom = -54.5294
+text = "1322"
+
+[node name="save up" type="Button" parent="debug menu/Control/Menu/main/save_label"]
+layout_mode = 0
+offset_left = 20.15
+offset_right = 39.235
+offset_bottom = 19.555
+text = "U"
+
+[node name="save down" type="Button" parent="debug menu/Control/Menu/main/save_label"]
+layout_mode = 0
+offset_left = -30.3
+offset_right = -12.6
+offset_bottom = 21.215
+text = "D"
+
+[node name="save" type="Button" parent="debug menu/Control/Menu/main/save_label"]
+layout_mode = 0
+offset_left = -54.15
+offset_top = 31.31
+offset_right = 0.244999
+offset_bottom = 53.645
+text = "save"
+
+[node name="load" type="Button" parent="debug menu/Control/Menu/main/save_label"]
+layout_mode = 0
+offset_left = 7.26
+offset_top = 31.31
+offset_right = 61.655
+offset_bottom = 53.645
+text = "load"
+
+[node name="Start_battle" type="Button" parent="debug menu/Control/Menu/main"]
+layout_mode = 0
+offset_left = -160.0
+offset_top = 106.133
+offset_right = -65.0
+offset_bottom = 137.133
+text = "start battle"
+
+[node name="End_battle" type="Button" parent="debug menu/Control/Menu/main/Start_battle"]
+layout_mode = 0
+offset_left = 111.0
+offset_right = 199.0
+offset_bottom = 31.0
+text = "end battle"
+
+[node name="color button" type="Button" parent="debug menu/Control/Menu/main"]
+layout_mode = 0
+offset_left = -131.0
+offset_top = 179.898
+offset_right = -2.99998
+offset_bottom = 216.898
+
+[node name="debuginfo" type="Button" parent="debug menu/Control/Menu/main"]
+layout_mode = 0
+offset_left = -184.0
+offset_top = -286.784
+offset_right = 45.0
+offset_bottom = -255.784
+text = "copy debug info to clipboard
+"
+
+[connection signal="choices_ready" from="dialogue ui/dialogue parser" to="dialogue ui" method="_on_dialogue_parser_choices_ready"]
+[connection signal="dialog_ended" from="dialogue ui/dialogue parser" to="dialogue ui" method="_on_dialogue_parser_dialog_ended"]
+[connection signal="dialog_line_ready" from="dialogue ui/dialogue parser" to="dialogue ui" method="_on_dialogue_parser_dialog_line_ready"]
+[connection signal="pressed" from="debug menu/Control/Menu/main/warp_button" to="debug menu/Control/Menu/main" method="_on_warp_button_pressed"]
+[connection signal="pressed" from="debug menu/Control/Menu/main/save_label/save up" to="debug menu/Control/Menu/main" method="_on_save_up_pressed"]
+[connection signal="pressed" from="debug menu/Control/Menu/main/save_label/save down" to="debug menu/Control/Menu/main" method="_on_save_down_pressed"]
+[connection signal="pressed" from="debug menu/Control/Menu/main/save_label/save" to="debug menu/Control/Menu/main" method="_on_save_pressed"]
+[connection signal="pressed" from="debug menu/Control/Menu/main/save_label/load" to="debug menu/Control/Menu/main" method="_on_load_pressed"]
+[connection signal="pressed" from="debug menu/Control/Menu/main/Start_battle" to="debug menu/Control/Menu/main" method="_on_start_battle_pressed"]
+[connection signal="pressed" from="debug menu/Control/Menu/main/Start_battle/End_battle" to="debug menu/Control/Menu/main" method="_on_end_battle_pressed"]
+[connection signal="pressed" from="debug menu/Control/Menu/main/color button" to="debug menu/Control/Menu/main" method="_on_color_button_pressed"]
+[connection signal="pressed" from="debug menu/Control/Menu/main/debuginfo" to="debug menu/Control/Menu/main" method="_on_debuginfo_pressed"]
